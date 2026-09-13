@@ -92,6 +92,8 @@ INSTALLED_APPS = [
 
     'api',
 
+    'matching',
+
 ]
 
 
