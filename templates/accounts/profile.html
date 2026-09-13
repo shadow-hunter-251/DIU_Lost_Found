@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Profile - DIU Lost & Found
+{% endblock %}
+
+
+{% block content %}
+
+<section class="max-w-5xl mx-auto px-6 py-16">
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-8">
+
+        <div class="flex items-center gap-5">
+
+            <div class="w-20 h-20 rounded-full bg-blue-50 text-primary flex items-center justify-center text-2xl font-bold">
+
+                {{ request.user.username|first|upper }}
+
+            </div>
+
+
+            <div>
+
+                <h1 class="text-2xl font-bold">
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </h1>
+
+                <p class="text-slate-500">
+                    @{{ request.user.username }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 gap-6 mt-10">
+
+            <div>
+
+                <p class="text-sm text-slate-500">
+                    First Name
+                </p>
+
+                <p class="font-medium mt-1">
+                    {{ request.user.first_name|default:"Not provided" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <p class="text-sm text-slate-500">
+                    Last Name
+                </p>
+
+                <p class="font-medium mt-1">
+                    {{ request.user.last_name|default:"Not provided" }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <p class="text-sm text-slate-500">
+                    Username
+                </p>
+
+                <p class="font-medium mt-1">
+                    {{ request.user.username }}
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <p class="text-sm text-slate-500">
+                    Email
+                </p>
+
+                <p class="font-medium mt-1">
+                    {{ request.user.email }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

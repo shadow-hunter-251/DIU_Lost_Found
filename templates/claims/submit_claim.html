@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Claim Item | DIU Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto px-6 py-12">
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+
+        <h1 class="text-2xl font-bold text-slate-900 mb-2">
+            Claim This Item
+        </h1>
+
+        <p class="text-slate-600 mb-8">
+            Item: <strong>{{ item.title }}</strong>
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-6">
+
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Why do you think this item is yours?
+                </label>
+
+                {{ form.message }}
+
+                {% if form.message.errors %}
+                    <div class="text-red-600 text-sm mt-2">
+                        {{ form.message.errors }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="flex gap-3">
+
+                <a
+                    href="{% url 'item_detail' item.id %}"
+                    class="px-5 py-3 border border-slate-300 rounded-lg font-medium hover:bg-slate-50"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="px-5 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
+                >
+                    Submit Claim
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

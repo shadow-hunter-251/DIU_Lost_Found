@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}DIU Lost & Found{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#287bd4',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+    {% include 'components/navbar.html' %}
+
+
+    <!-- Django Messages -->
+
+    {% if messages %}
+
+        <div class="max-w-7xl mx-auto px-6 mt-4">
+
+            {% for message in messages %}
+
+                <div
+                    class="mb-3 px-4 py-3 rounded-lg border
+                    {% if message.tags == 'success' %}
+                        bg-green-50 text-green-700 border-green-200
+                    {% elif message.tags == 'error' %}
+                        bg-red-50 text-red-700 border-red-200
+                    {% else %}
+                        bg-blue-50 text-blue-700 border-blue-200
+                    {% endif %}"
+                >
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <script src="{% static 'js/api.js' %}"></script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

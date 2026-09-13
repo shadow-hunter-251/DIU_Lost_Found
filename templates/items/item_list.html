@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+    Lost & Found Items
+
+{% endblock %}
+
+{% block content %}
+
+<section class="py-16">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="text-center mb-10">
+
+            <h1 class="text-4xl font-bold text-slate-900">
+
+                Lost & Found Items
+
+            </h1>
+
+            <p class="text-slate-500 mt-3">
+
+                Find lost items or help someone recover their belongings.
+
+            </p>
+
+        </div>
+
+
+        <!-- Search & Filters -->
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 mb-8">
+
+            <form
+                method="GET"
+                action="{% url 'item_list' %}"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+            >
+
+                <!-- Search -->
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="Search items..."
+                    class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+
+
+                <!-- Type -->
+
+                <select
+                    name="type"
+                    class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+
+                    <option value="">
+
+                        All Types
+
+                    </option>
+
+                    <option
+                        value="LOST"
+                        {% if item_type == 'LOST' %}
+
+                            selected
+
+                        {% endif %}
+                    >
+
+                        Lost
+
+                    </option>
+
+                    <option
+                        value="FOUND"
+                        {% if item_type == 'FOUND' %}
+
+                            selected
+
+                        {% endif %}
+                    >
+
+                        Found
+
+                    </option>
+
+                </select>
+
+
+                <!-- Category -->
+
+                <select
+                    name="category"
+                    class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+
+                    <option value="">
+
+                        All Categories
+
+                    </option>
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category.id }}"
+                            {% if category_id == category.id|stringformat:"s" %}
+
+                                selected
+
+                            {% endif %}
+                        >
+
+                            {{ category.name }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <!-- Location -->
+
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ location }}"
+                    placeholder="Location"
+                    class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+
+
+                <!-- Buttons -->
+
+                <div class="md:col-span-2 lg:col-span-4 flex flex-col sm:flex-row gap-3">
+
+                    <button
+                        type="submit"
+                        class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90"
+                    >
+
+                        Search
+
+                    </button>
+
+                    <a
+                        href="{% url 'item_list' %}"
+                        class="px-6 py-3 rounded-lg border border-slate-300 text-center font-semibold hover:bg-slate-50"
+                    >
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- Result Count -->
+
+        <div class="flex items-center justify-between mb-6">
+
+            <div>
+
+                <h2 class="text-2xl font-bold text-slate-900">
+
+                    Items
+
+                </h2>
+
+                <p class="text-slate-500 mt-1">
+
+                    {{ page_obj.paginator.count }}
+
+                    item{{ page_obj.paginator.count|pluralize }} found
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- API Items Container -->
+
+        <div
+            id="api-items-container"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+        </div>
+
+
+        <!-- Empty State -->
+
+        <div
+            id="empty-state"
+            class="hidden bg-white border border-slate-200 rounded-2xl p-12 text-center"
+        >
+
+            <div class="text-5xl mb-4">
+
+                🔍
+
+            </div>
+
+            <h3 class="text-xl font-bold text-slate-900">
+
+                No items found
+
+            </h3>
+
+            <p class="text-slate-500 mt-2">
+
+                Try changing your search or filter options.
+
+            </p>
+
+            <a
+                href="{% url 'item_list' %}"
+                class="inline-block mt-5 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:opacity-90"
+            >
+
+                Clear Filters
+
+            </a>
+
+        </div>
+
+
+        <!-- Pagination -->
+
+        {% if page_obj %}
+
+            <div class="flex justify-center items-center gap-2 mt-12">
+
+                {% if page_obj.has_previous %}
+
+                    <a
+                        href="?q={{ query }}&type={{ item_type }}&category={{ category_id }}&location={{ location }}&page={{ page_obj.previous_page_number }}"
+                        class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50"
+                    >
+
+                        Previous
+
+                    </a>
+
+                {% endif %}
+
+
+                <span class="px-4 py-2 bg-primary text-white rounded-lg">
+
+                    {{ page_obj.number }}
+
+                </span>
+
+
+                {% if page_obj.has_next %}
+
+                    <a
+                        href="?q={{ query }}&type={{ item_type }}&category={{ category_id }}&location={{ location }}&page={{ page_obj.next_page_number }}"
+                        class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50"
+                    >
+
+                        Next
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

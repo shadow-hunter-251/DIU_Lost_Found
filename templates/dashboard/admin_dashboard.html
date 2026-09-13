@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | DIU Lost & Found{% endblock %}
+
+{% block content %}
+
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+    <div class="mb-8">
+
+        <h1 class="text-3xl font-bold text-slate-900">
+            Admin Dashboard
+        </h1>
+
+        <p class="text-slate-600 mt-2">
+            Manage and monitor the DIU Lost & Found platform.
+        </p>
+
+    </div>
+
+
+    <!-- Statistics -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Total Users
+            </p>
+
+            <p class="text-3xl font-bold text-slate-900 mt-2">
+                {{ total_users }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Total Items
+            </p>
+
+            <p class="text-3xl font-bold text-slate-900 mt-2">
+                {{ total_items }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Total Claims
+            </p>
+
+            <p class="text-3xl font-bold text-slate-900 mt-2">
+                {{ total_claims }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Pending Claims
+            </p>
+
+            <p class="text-3xl font-bold text-slate-900 mt-2">
+                {{ pending_claims }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Item Statistics -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Lost Items
+            </p>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ lost_items }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Found Items
+            </p>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ found_items }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Active Items
+            </p>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ active_items }}
+            </p>
+        </div>
+
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6">
+            <p class="text-sm text-slate-500">
+                Claimed Items
+            </p>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ claimed_items }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Recent Items -->
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8">
+
+        <div class="flex items-center justify-between mb-5">
+
+            <h2 class="text-xl font-bold text-slate-900">
+                Recent Items
+            </h2>
+
+            <a
+                href="{% url 'item_list' %}"
+                class="text-sm font-semibold text-primary hover:underline"
+            >
+                View All
+            </a>
+
+        </div>
+
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left">
+
+                <thead class="border-b border-slate-200">
+
+                    <tr>
+                        <th class="py-3 pr-4 text-sm text-slate-500">
+                            Item
+                        </th>
+
+                        <th class="py-3 pr-4 text-sm text-slate-500">
+                            Type
+                        </th>
+
+                        <th class="py-3 pr-4 text-sm text-slate-500">
+                            User
+                        </th>
+
+                        <th class="py-3 text-sm text-slate-500">
+                            Status
+                        </th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in recent_items %}
+
+                        <tr class="border-b border-slate-100">
+
+                            <td class="py-4 pr-4">
+                                <a
+                                    href="{% url 'item_detail' item.id %}"
+                                    class="font-semibold text-slate-800 hover:text-primary"
+                                >
+                                    {{ item.title }}
+                                </a>
+                            </td>
+
+                            <td class="py-4 pr-4 text-sm">
+                                {{ item.get_item_type_display }}
+                            </td>
+
+                            <td class="py-4 pr-4 text-sm">
+                                {{ item.user.username }}
+                            </td>
+
+                            <td class="py-4 text-sm">
+                                {{ item.get_status_display }}
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+                            <td
+                                colspan="4"
+                                class="py-8 text-center text-slate-500"
+                            >
+                                No items found.
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Recent Claims -->
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 mb-8">
+
+        <div class="flex items-center justify-between mb-5">
+
+            <h2 class="text-xl font-bold text-slate-900">
+                Recent Claims
+            </h2>
+
+            <a
+                href="{% url 'claim_list' %}"
+                class="text-sm font-semibold text-primary hover:underline"
+            >
+                View All
+            </a>
+
+        </div>
+
+
+        <div class="space-y-4">
+
+            {% for claim in recent_claims %}
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-slate-100 pb-4">
+
+                    <div>
+
+                        <p class="font-semibold text-slate-900">
+                            {{ claim.item.title }}
+                        </p>
+
+                        <p class="text-sm text-slate-500">
+                            Claimed by {{ claim.claimant.username }}
+                        </p>
+
+                    </div>
+
+                    <span class="text-sm font-medium">
+                        {{ claim.get_status_display }}
+                    </span>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-slate-500">
+                    No claims found.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Recent Users -->
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6">
+
+        <h2 class="text-xl font-bold text-slate-900 mb-5">
+            Recent Users
+        </h2>
+
+        <div class="space-y-4">
+
+            {% for user_obj in recent_users %}
+
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+
+                    <div>
+
+                        <p class="font-semibold text-slate-900">
+                            {{ user_obj.username }}
+                        </p>
+
+                        <p class="text-sm text-slate-500">
+                            {{ user_obj.email }}
+                        </p>
+
+                    </div>
+
+                    <p class="text-sm text-slate-400">
+                        {{ user_obj.date_joined|date:"M d, Y" }}
+                    </p>
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-slate-500">
+                    No users found.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
